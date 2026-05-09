@@ -52,11 +52,6 @@ body{
 
 .overlay h1{
     font-size:42px;
-    margin-bottom:10px;
-}
-
-.overlay p{
-    font-size:18px;
 }
 
 .content{
@@ -87,11 +82,6 @@ body{
     font-size:16px;
 }
 
-.input-box input:focus{
-    outline:none;
-    border-color:#2563eb;
-}
-
 .buttons{
     margin-top:30px;
     display:flex;
@@ -107,7 +97,6 @@ button{
     font-size:16px;
     cursor:pointer;
     font-weight:bold;
-    transition:0.3s;
 }
 
 .calcular{
@@ -115,18 +104,8 @@ button{
     color:white;
 }
 
-.calcular:hover{
-    background:#1d4ed8;
-    transform:scale(1.05);
-}
-
 .reset{
     background:#e2e8f0;
-}
-
-.reset:hover{
-    background:#94a3b8;
-    color:white;
 }
 
 .resultado{
@@ -162,28 +141,31 @@ button{
 
 .image-section img{
     width:280px;
-    border-radius:20px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.2);
-}
-
-.footer{
-    margin-top:30px;
-    text-align:center;
-    color:#64748b;
 }
 
 </style>
 </head>
+
 <body>
 
 <div class="container">
 
     <div class="header">
+
         <div class="overlay">
+
             <h1>Calculadora de Triángulos</h1>
-            <h3 style="margin-top:10px;">Alumno: Luis Bayardo</h3>
-            <p style="margin-top:10px;">Resuelve triángulos usando trigonometría</p>
+
+            <h3 style="margin-top:10px;">
+                Alumno: Luis Bayardo
+            </h3>
+
+            <p style="margin-top:10px;">
+                Resuelve triángulos usando trigonometría
+            </p>
+
         </div>
+
     </div>
 
     <div class="content">
@@ -192,44 +174,50 @@ button{
 
             <div class="input-box">
                 <label>Lado a</label>
-                <input type="number" id="a" placeholder="Ejemplo: 5">
+                <input type="number" id="a">
             </div>
 
             <div class="input-box">
                 <label>Lado b</label>
-                <input type="number" id="b" placeholder="Ejemplo: 8">
+                <input type="number" id="b">
             </div>
 
             <div class="input-box">
                 <label>Lado c</label>
-                <input type="number" id="c" placeholder="Ejemplo: 10">
+                <input type="number" id="c">
             </div>
 
             <div class="input-box">
                 <label>Ángulo A</label>
-                <input type="number" id="A" placeholder="Ejemplo: 45">
+                <input type="number" id="A">
             </div>
 
             <div class="input-box">
                 <label>Ángulo B</label>
-                <input type="number" id="B" placeholder="Ejemplo: 60">
+                <input type="number" id="B">
             </div>
 
             <div class="input-box">
                 <label>Ángulo C</label>
-                <input type="number" id="C" placeholder="Ejemplo: 75">
+                <input type="number" id="C">
             </div>
 
         </div>
 
         <div class="buttons">
-            <button class="calcular" onclick="calcular()">Calcular</button>
-            <button class="reset" onclick="limpiar()">Restablecer</button>
+            <button class="calcular" onclick="calcular()">
+                Calcular
+            </button>
+
+            <button class="reset" onclick="limpiar()">
+                Restablecer
+            </button>
         </div>
 
         <div class="error" id="error"></div>
 
         <div class="resultado" id="resultado">
+
             <h2>Resultados</h2>
 
             <p id="r1"></p>
@@ -239,14 +227,13 @@ button{
             <p id="r5"></p>
             <p id="r6"></p>
             <p id="tipo"></p>
+
         </div>
 
         <div class="image-section">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Triangle_geometry.svg/512px-Triangle_geometry.svg.png" alt="Triángulo">
-        </div>
 
-        <div class="footer">
-            <p>Proyecto de trigonometría y cálculo de triángulos</p>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Triangle_geometry.svg/512px-Triangle_geometry.svg.png">
+
         </div>
 
     </div>
@@ -276,85 +263,43 @@ function calcular(){
     let error=document.getElementById('error');
     error.innerHTML='';
 
-    let datos=[a,b,c,A,B,C].filter(x=>!isNaN(x)).length;
+    if(!isNaN(a)&&!isNaN(b)&&!isNaN(c)){
 
-    if(datos<3){
-        error.innerHTML='Debes ingresar al menos 3 datos.';
+        A=deg(Math.acos((b*b+c*c-a*a)/(2*b*c)));
+        B=deg(Math.acos((a*a+c*c-b*b)/(2*a*c)));
+        C=180-A-B;
+    }
+
+    else{
+        error.innerHTML='Ingresa los 3 lados.';
         return;
     }
-
-    let lados=[a,b,c].filter(x=>!isNaN(x)).length;
-
-    if(lados<1){
-        error.innerHTML='Debes ingresar al menos un lado.';
-        return;
-    }
-
-    try{
-
-        if(!isNaN(a)&&!isNaN(b)&&!isNaN(c)){
-
-            if(a+b<=c||a+c<=b||b+c<=a){
-                throw 'Los lados no forman un triángulo válido';
-            }
-
-            A=deg(Math.acos((b*b+c*c-a*a)/(2*b*c)));
-            B=deg(Math.acos((a*a+c*c-b*b)/(2*a*c)));
-            C=180-A-B;
-        }
-
-        else if(!isNaN(a)&&!isNaN(b)&&!isNaN(C)){
-
-            c=Math.sqrt(a*a+b*b-2*a*b*Math.cos(rad(C)));
-
-            A=deg(Math.asin((a*Math.sin(rad(C)))/c));
-            B=180-A-C;
-        }
-
-        else if(!isNaN(a)&&!isNaN(A)&&!isNaN(B)){
-
-            C=180-A-B;
-
-            b=(a*Math.sin(rad(B)))/Math.sin(rad(A));
-            c=(a*Math.sin(rad(C)))/Math.sin(rad(A));
-        }
-
-        else{
-            throw 'Combinación de datos no soportada';
-        }
-
-        mostrar(a,b,c,A,B,C);
-
-    }catch(e){
-        error.innerHTML=e;
-    }
-}
-
-function mostrar(a,b,c,A,B,C){
 
     document.getElementById('resultado').style.display='block';
 
-    document.getElementById('r1').innerHTML='<strong>Lado a:</strong> '+a.toFixed(2);
-    document.getElementById('r2').innerHTML='<strong>Lado b:</strong> '+b.toFixed(2);
-    document.getElementById('r3').innerHTML='<strong>Lado c:</strong> '+c.toFixed(2);
+    document.getElementById('r1').innerHTML='Lado a: '+a.toFixed(2);
+    document.getElementById('r2').innerHTML='Lado b: '+b.toFixed(2);
+    document.getElementById('r3').innerHTML='Lado c: '+c.toFixed(2);
 
-    document.getElementById('r4').innerHTML='<strong>Ángulo A:</strong> '+A.toFixed(2)+'°';
-    document.getElementById('r5').innerHTML='<strong>Ángulo B:</strong> '+B.toFixed(2)+'°';
-    document.getElementById('r6').innerHTML='<strong>Ángulo C:</strong> '+C.toFixed(2)+'°';
+    document.getElementById('r4').innerHTML='Ángulo A: '+A.toFixed(2)+'°';
+    document.getElementById('r5').innerHTML='Ángulo B: '+B.toFixed(2)+'°';
+    document.getElementById('r6').innerHTML='Ángulo C: '+C.toFixed(2)+'°';
 
     let tipo='';
 
-    if(Math.abs(a-b)<0.01 && Math.abs(b-c)<0.01){
+    if(a===b && b===c){
         tipo='Equilátero';
     }
-    else if(Math.abs(a-b)<0.01 || Math.abs(a-c)<0.01 || Math.abs(b-c)<0.01){
+
+    else if(a===b || a===c || b===c){
         tipo='Isósceles';
     }
+
     else{
         tipo='Escaleno';
     }
 
-    document.getElementById('tipo').innerHTML='<strong>Tipo:</strong> '+tipo;
+    document.getElementById('tipo').innerHTML='Tipo: '+tipo;
 }
 
 function limpiar(){
